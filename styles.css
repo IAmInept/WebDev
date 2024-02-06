@@ -1,0 +1,28 @@
+.hidden {
+    display: none;
+}
+
+fieldset {
+    border: solid 0.1em;
+    margin: 0.5em;
+    width: 12.5em;
+    display: inline-block;
+}
+
+legend {
+    padding: 0.4em;
+}
+
+#resetPage {
+    background-color: brown;
+    border: 0.2em solid black ;
+    color: white;
+    padding: 1em;
+}
+#resetPage:hover {
+    background-color: darkred;
+}
+
+input {
+    margin: 0.3em;
+}

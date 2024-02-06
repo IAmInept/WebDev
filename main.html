@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Make quick and fast orders with Brian's Bevvy's.">
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+    <title>Brian’s Bevvies</title>
+</head> 
+
+<body>
+    <h1 id="body_head"> Brian's Bevvies</h1>
+
+    <fieldset id="bevSize">
+        <legend>Select Beverage Size: </legend>
+        <div>
+                <input type="radio" name="sizeSelection" id="sizeS">
+                <label for="sizeS">Small - £2.70</label>
+        </div>
+        <div>
+                <input type="radio" name="sizeSelection" id="sizeM" checked>
+                <label for="sizeM">Medium - £3.20</label>
+        </div>
+        <div>
+                <input type="radio" name="sizeSelection" id="sizeL">
+                <label for="sizeL">Large - £3.70</label>
+        </div>
+        <div>
+                <input type="radio" name="sizeSelection" id="sizeXL">
+                <label for="sizeXL">Extra Large - £4.50</label>
+        </div>
+    </fieldset>
+
+    <fieldset id="drinkType">
+        <legend>Drink Type</legend>
+
+        <div>
+            <input type="radio" name="drinkType" id="drinkType_smoothie" >
+            <label for="drinkType_smoothie">Smoothie</label>
+        </div>
+        
+        <div>
+            <input type="radio" name="drinkType" id="drinkType_milkshake">
+            <label for="drinkType_milkshake">Milkshake</label>
+        </div>
+
+    </fieldset>
+
+    <fieldset id="bevIngredients">
+        <legend>Ingredients</legend>
+
+        <div>
+            <input type="checkbox" name="ingredients" id="bevIngredients_banana">
+            <label for="bevIngredients_banana">Banana</label>
+        </div>
+
+        <div>
+            <input type="checkbox" name="ingredients" id="bevIngredients_raspberry">
+            <label for="bevIngredients_raspberry">Raspberry</label>
+        </div>
+
+        <div>
+            <input type="checkbox" name="ingredients" id="bevIngredients_cranberry">
+            <label for="bevIngredients_cranberry">Cranberry</label>
+
+        <div>
+            <input type="checkbox" name="ingredients" id="bevIngredients_strawberry">
+            <label for="bevIngredients_strawberry">Strawberry</label>
+        </div>
+
+        <div>
+            <input type="checkbox" name="ingredients" id="bevIngredients_chocolate">
+            <label for="bevIngredients_chocolate">Chocolate</label>
+        </div>
+    </fieldset>
+
+    <fieldset id="smoothieBase">
+        <legend>Smoothie Base: </legend>
+        <div>
+            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_appleJuice">
+            <label for="smoothieBase_appleJuice">Apple Juice</label>
+        </div>
+        <div>
+            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_orangeJuice" checked>
+            <label for="smoothieBase_orangeJuice">Orange Juice</label>
+        </div>
+    </fieldset>
+
+    <fieldset id="milkshakeBase">
+        <legend> Milkshake Base</legend>
+        <div>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_wholeMilk">
+            <label for="milkshakeBase_wholeMilk">Whole Milk</label>
+        </div>
+        <div>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_semiSkimmed">
+            <label for="milkshakeBase_semiSkimmed">Semi-Skimmed Milk</label>
+        </div>
+        <div>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_skimmedMilk" checked>
+            <label for="milkshakeBase_skimmedMilk">Skimmed Milk</label>
+        </div>
+        <div>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_coconutMilk">
+            <label for="milkshakeBase_coconutMilk">Coconut Milk</label>
+        </div>
+        <div>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_oatMilk">
+            <label for="milkshakeBase_oatMilk">Oat Milk</label>
+        </div>
+    </fieldset>
+
+    <fieldset id="milkshakeExtra">
+        <legend>Milkshake Extras</legend>
+        <div>
+            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_malt">
+            <label for="milkshakeExtra_malt">Malt</label>
+        </div>
+        <div>
+            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_marshmallows">
+            <label for="milkshakeExtra_marshmallows">Marshmallows</label>
+        </div>
+        <div>
+            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_whippedCream">
+            <label for="milkshakeExtra_whippedCream">Whipped Cream</label>
+        </div>
+        <div>
+            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_flake">
+            <label for="milkshakeExtra_flake">Flake</label>
+        </div>
+    </fieldset>
+
+    <fieldset id="displayCost">
+        <legend> Total Cost: </legend>
+        <p id="cost"></p>
+    </fieldset>
+
+    <div>
+        <input type="button" value="Add To Order" id="addOrder">
+    </div>
+
+    <div>
+        <input type="button" value="Place Order" id="placeOrder">
+    </div>
+
+    <div>
+        <input type="button" value="Save my Favourite" id="saveFavourite">
+    </div>
+
+    <div>
+        <input type="button" value="Order my Favourite" id="orderFavourite">
+    </div>
+
+    <div>
+        <input type="button" value="Reset Page" id="resetPage">
+    </div>
+
+</body>
+</html>
