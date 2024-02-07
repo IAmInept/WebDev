@@ -31,21 +31,13 @@ drinkSize.addEventListener("change", checkSizeCost)
 //Calling start function
 initialiseStartup()
 
-//Initialisation function that sets all extra classes to hidden.
+
 function initialiseStartup() {
     console.log("Startup initialised")
-    //setting all price variables
     setVariables()
-    //unchecking drink selection type.
     uncheckItems()
-    //setting cost to default price of medium drink.
-    txtCost.innerText = `${"£" + sizeCost.toFixed(2)}`
-    //hiding additional fieldset that are not needed to be shown
-    smoothieBase.classList.add("hidden");
-    milkshakeBase.classList.add("hidden");
-    milkshakeBaseExtra.classList.add("hidden");
-    // simple console.log to ensure function has ended
-    console.log("Startup Configured.")
+    hideExtras()
+    console.log("Startup configured.")
 }
 function setVariables() {
     //setting drink size prices
@@ -57,10 +49,8 @@ function setVariables() {
     milkshakeExtraCost = 0.85;
     //setting default size cost to medium
     sizeCost = 3.20;
+    txtCost.innerText = `${"£" + sizeCost.toFixed(2)}`
     //setting default drink and smoothieBase to checked
-    document.getElementById("sizeM").checked = true
-    document.getElementById("smoothieBase_orangeJuice").checked = true
-    document.getElementById("milkshakeBase_skimmedMilk").checked = true
 }
 function uncheckItems() {
     //setting either drink type to unchecked
@@ -77,10 +67,12 @@ function uncheckItems() {
     document.getElementById("milkshakeExtra_marshmallows").checked = false
     document.getElementById("milkshakeExtra_whippedCream").checked = false
     document.getElementById("milkshakeExtra_flake").checked = false
+    // setting default choices to checked.
+    document.getElementById("sizeM").checked = true
+    document.getElementById("smoothieBase_orangeJuice").checked = true
+    document.getElementById("milkshakeBase_skimmedMilk").checked = true
 }
 function drinkTypeChange() {
-    // function that is called when a change is detected on the "drinkType" form,
-// which checks whether smoothie or milkshake is checked and displays the relevant boxes.
     if (document.getElementById("drinkType_smoothie").checked) { // checks if smoothie radio button is checked.
         console.log("Smoothie has been selected, Displaying relevant fields."); // logs to confirm if statement is functioned
         smoothieBase.classList.remove("hidden");
@@ -92,6 +84,12 @@ function drinkTypeChange() {
         milkshakeBaseExtra.classList.remove("hidden");
         smoothieBase.classList.add("hidden");
     }
+}
+function hideExtras() {
+    //hiding additional fieldset that are not needed to be shown
+    smoothieBase.classList.add("hidden");
+    milkshakeBase.classList.add("hidden");
+    milkshakeBaseExtra.classList.add("hidden");
 }
 function checkSizeCost() {
  if (document.getElementById("sizeS").checked) {
