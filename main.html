@@ -14,19 +14,19 @@
     <fieldset id="bevSize">
         <legend>Select Beverage Size: </legend>
         <div>
-                <input type="radio" name="sizeSelection" id="sizeS">
+                <input type="radio" name="sizeSelection" id="sizeS" value="Small">
                 <label for="sizeS">Small - £2.70</label>
         </div>
         <div>
-                <input type="radio" name="sizeSelection" id="sizeM" checked>
+                <input type="radio" name="sizeSelection" id="sizeM" value="Medium" checked>
                 <label for="sizeM">Medium - £3.20</label>
         </div>
         <div>
-                <input type="radio" name="sizeSelection" id="sizeL">
+                <input type="radio" name="sizeSelection" id="sizeL" value="Large">
                 <label for="sizeL">Large - £3.70</label>
         </div>
         <div>
-                <input type="radio" name="sizeSelection" id="sizeXL">
+                <input type="radio" name="sizeSelection" id="sizeXL" value="Extra Large">
                 <label for="sizeXL">Extra Large - £4.50</label>
         </div>
     </fieldset>
@@ -35,12 +35,12 @@
         <legend>Drink Type</legend>
 
         <div>
-            <input type="radio" name="drinkType" id="drinkType_smoothie" >
+            <input type="radio" name="drinkType" id="drinkType_smoothie" value="Smoothie" >
             <label for="drinkType_smoothie">Smoothie</label>
         </div>
         
         <div>
-            <input type="radio" name="drinkType" id="drinkType_milkshake">
+            <input type="radio" name="drinkType" id="drinkType_milkshake" value="Milkshake">
             <label for="drinkType_milkshake">Milkshake</label>
         </div>
 
@@ -50,26 +50,26 @@
         <legend>Ingredients</legend>
 
         <div>
-            <input type="checkbox" name="ingredients" id="bevIngredients_banana">
+            <input type="checkbox" name="ingredients" id="bevIngredients_banana" value="Banana">
             <label for="bevIngredients_banana">Banana</label>
         </div>
 
         <div>
-            <input type="checkbox" name="ingredients" id="bevIngredients_raspberry">
+            <input type="checkbox" name="ingredients" id="bevIngredients_raspberry" value="Raspberry">
             <label for="bevIngredients_raspberry">Raspberry</label>
         </div>
 
         <div>
-            <input type="checkbox" name="ingredients" id="bevIngredients_cranberry">
+            <input type="checkbox" name="ingredients" id="bevIngredients_cranberry" value="Cranberry">
             <label for="bevIngredients_cranberry">Cranberry</label>
 
         <div>
-            <input type="checkbox" name="ingredients" id="bevIngredients_strawberry">
+            <input type="checkbox" name="ingredients" id="bevIngredients_strawberry" value="Strawberry">
             <label for="bevIngredients_strawberry">Strawberry</label>
         </div>
 
         <div>
-            <input type="checkbox" name="ingredients" id="bevIngredients_chocolate">
+            <input type="checkbox" name="ingredients" id="bevIngredients_chocolate" value="Chocolate">
             <label for="bevIngredients_chocolate">Chocolate</label>
         </div>
     </fieldset>
@@ -77,11 +77,11 @@
     <fieldset id="smoothieBase">
         <legend>Smoothie Base: </legend>
         <div>
-            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_appleJuice">
+            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_appleJuice" value="Apple Juice">
             <label for="smoothieBase_appleJuice">Apple Juice</label>
         </div>
         <div>
-            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_orangeJuice" checked>
+            <input type="radio" name="itemBaseSmoothie" id="smoothieBase_orangeJuice" value="Orange Juice" checked>
             <label for="smoothieBase_orangeJuice">Orange Juice</label>
         </div>
     </fieldset>
@@ -89,23 +89,23 @@
     <fieldset id="milkshakeBase">
         <legend> Milkshake Base</legend>
         <div>
-            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_wholeMilk">
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_wholeMilk" value="Whole Milk">
             <label for="milkshakeBase_wholeMilk">Whole Milk</label>
         </div>
         <div>
-            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_semiSkimmed">
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_semiSkimmed" value="Semi Skimmed">
             <label for="milkshakeBase_semiSkimmed">Semi-Skimmed Milk</label>
         </div>
         <div>
-            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_skimmedMilk" checked>
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_skimmedMilk" value="Skimmed Milk" checked>
             <label for="milkshakeBase_skimmedMilk">Skimmed Milk</label>
         </div>
         <div>
-            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_coconutMilk">
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_coconutMilk" value="coconutMilk">
             <label for="milkshakeBase_coconutMilk">Coconut Milk</label>
         </div>
         <div>
-            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_oatMilk">
+            <input type="radio" name="itemBaseMilkshake" id="milkshakeBase_oatMilk" value="Oat Milk">
             <label for="milkshakeBase_oatMilk">Oat Milk</label>
         </div>
     </fieldset>
@@ -113,27 +113,41 @@
     <fieldset id="milkshakeExtra">
         <legend>Milkshake Extras</legend>
         <div>
-            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_malt" value="malt">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_malt" value="Malt">
             <label for="milkshakeExtra_malt">Malt</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_marshmallows" value="marshmallows">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_marshmallows" value="Marshmallows">
             <label for="milkshakeExtra_marshmallows">Marshmallows</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_whippedCream" value="whippedCream">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_whippedCream" value="WhippedCream">
             <label for="milkshakeExtra_whippedCream">Whipped Cream</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_flake" value="flake">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_flake" value="Flake">
             <label for="milkshakeExtra_flake">Flake</label>
         </div>
     </fieldset>
 
-    <fieldset id="displayCost">
-        <legend> Total Cost: </legend>
+    <fieldset id="displayCurrentCost">
+        <legend> Drink Price: </legend>
         <p id="cost"></p>
         <p id="items"></p>
+    </fieldset>
+
+    <fieldset id="displayOrder">
+        <legend>Your Order:</legend>
+        <div>
+            <p id="orderTotal"></p>
+        </div>
+    </fieldset>
+
+    <fieldset id="displayOrderPrice">
+        <legend>Your Total Order Price:</legend>
+        <div>
+            <p id="orderTotalCost"></p>
+        </div>
     </fieldset>
 
     <div>
