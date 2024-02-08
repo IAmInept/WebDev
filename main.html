@@ -11,7 +11,6 @@
 
 <body>
     <h1 id="body_head"> Brian's Bevvies</h1>
-
     <fieldset id="bevSize">
         <legend>Select Beverage Size: </legend>
         <div>
@@ -73,7 +72,7 @@
             <input type="checkbox" name="ingredients" id="bevIngredients_chocolate">
             <label for="bevIngredients_chocolate">Chocolate</label>
         </div>
-     </fieldset>
+    </fieldset>
 
     <fieldset id="smoothieBase">
         <legend>Smoothie Base: </legend>
@@ -114,19 +113,19 @@
     <fieldset id="milkshakeExtra">
         <legend>Milkshake Extras</legend>
         <div>
-            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_malt">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_malt" value="malt">
             <label for="milkshakeExtra_malt">Malt</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_marshmallows">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_marshmallows" value="marshmallows">
             <label for="milkshakeExtra_marshmallows">Marshmallows</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_whippedCream">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_whippedCream" value="whippedCream">
             <label for="milkshakeExtra_whippedCream">Whipped Cream</label>
         </div>
         <div>
-            <input type="checkbox" name="milkshakeExtra" id="milkshakeExtra_flake">
+            <input type="checkbox" name="milkshakeExtraItem" id="milkshakeExtra_flake" value="flake">
             <label for="milkshakeExtra_flake">Flake</label>
         </div>
     </fieldset>
@@ -134,6 +133,7 @@
     <fieldset id="displayCost">
         <legend> Total Cost: </legend>
         <p id="cost"></p>
+        <p id="items"></p>
     </fieldset>
 
     <div>

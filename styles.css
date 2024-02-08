@@ -6,11 +6,10 @@ fieldset {
     border: solid 0.1em;
     margin: 0.5em;
     width: 12.5em;
-    display: inline-block;
 }
 
 legend {
-    padding: 0.4em;
+    padding: 0.2em;
 }
 
 #resetPage {
