@@ -1,36 +1,51 @@
 // Preliminary Check to ensure Javascript file loads on startup.
 console.log("main.js has loaded successful");
 
-// Defining Constant functions tied to Document ID's
+//Buttons
+const btnOrder = document.getElementById("addOrder")
+const btnPlaceOrder = document.getElementById("placeOrder")
+const btnResetPage = document.getElementById("resetPage");
+const btnSaveFav = document.getElementById("saveFavourite");
+const btnOrderFave = document.getElementById("orderFavourite");
+//Arrays
+const drinkSizeArray = document.getElementsByName("sizeSelection");
+const ingredientArray = document.getElementsByName("ingredients");
+const smoothieBaseArray = document.getElementsByName("itemBaseSmoothie");
 const drinkSize = document.getElementById("bevSize");
+const drinkTypeList = document.getElementsByName("drinkType");
+const milkshakeExtra = document.getElementsByName("milkshakeExtraItem");
+const milkshakeBaseArray = document.getElementsByName("itemBaseMilkshake");
+//Misc
 const smoothieBase = document.getElementById("smoothieBase");
 const milkshakeBase = document.getElementById("milkshakeBase");
 const milkshakeBaseExtra = document.getElementById("milkshakeExtra");
 const drinkType = document.getElementById("drinkType");
-const resetPage = document.getElementById("resetPage");
-const saveFav = document.getElementById("saveFavourite");
-const orderFave = document.getElementById("orderFavourite");
-const milkshakeExtra = document.getElementsByName("milkshakeExtraItem");
+const fieldsetCurrentOrder = document.getElementById("displayOrder")
+const fieldsetTotalPrice = document.getElementById("displayOrderPrice")
+
 const txtCost = document.getElementById("cost");
+const txtOrderTotal = document.getElementById("orderTotal");
+const txtFinalOrderPrice = document.getElementById("orderTotalCost");
 
 //establishing variable costs for cost processing and display.
 let orderSize;
-let orderCost;
+let drinkCost;
 let sizeCost;
 let milkshakeExtraCost;
+let orderCost;
+let orderItems = [];
 
 //Adding change event listener and calling function to check what is checked and apply appropriate feature.
 drinkSize.addEventListener("change", checkSizeCost)
 drinkType.addEventListener("change", drinkTypeChange)
-resetPage.addEventListener("click", initialiseStartup)
-saveFav.addEventListener("click", saveFavourite)
-orderFave.addEventListener("click", orderFavourite)
+btnOrder.addEventListener("click", addToOrder)
+btnPlaceOrder.addEventListener("click", placeOrder)
+btnSaveFav.addEventListener("click", saveFavourite)
+btnOrderFave.addEventListener("click", orderFavourite)
+btnResetPage.addEventListener("click", initialiseStartup)
 milkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra))
 
-
-//Calling start function
 initialiseStartup()
-
 
 // ---------------------------------------------------------
 
@@ -41,29 +56,38 @@ function initialiseStartup() {
     hideExtras()
     console.log("Startup configured.")
 }
-function setVariables() {
-    milkshakeExtraCost = 0;
+
+function resetDrinkField() {
     sizeCost = 3.20;
-    orderCost = sizeCost + milkshakeExtraCost
-    txtCost.innerText = `${"£" + orderCost.toFixed(2)}`
-    //setting default drink and smoothieBase to checked
+    drinkCost = sizeCost
+    milkshakeExtraCost = 0;
+    txtCost.innerText = `${"£" + drinkCost.toFixed(2)}`
+    uncheckItems()
+    hideExtras()
+}
+function setVariables() {
+    sizeCost = 3.20;
+    milkshakeExtraCost = 0;
+    orderItems = []
+    drinkCost = sizeCost
+    orderCost = 0
+    txtCost.innerText = `${"£" + drinkCost.toFixed(2)}`
 }
 function uncheckItems() {
-    //setting either drink type to unchecked
     document.getElementById("drinkType_milkshake").checked = false
     document.getElementById("drinkType_smoothie").checked = false
-    //unchecking all ingredients
+
     document.getElementById("bevIngredients_banana").checked = false
     document.getElementById("bevIngredients_strawberry").checked = false
     document.getElementById("bevIngredients_cranberry").checked = false
     document.getElementById("bevIngredients_raspberry").checked = false
     document.getElementById("bevIngredients_chocolate").checked = false
-    //unchecking all milkshake extras
+
     document.getElementById("milkshakeExtra_malt").checked = false
     document.getElementById("milkshakeExtra_marshmallows").checked = false
     document.getElementById("milkshakeExtra_whippedCream").checked = false
     document.getElementById("milkshakeExtra_flake").checked = false
-    // setting default choices to checked.
+
     document.getElementById("sizeM").checked = true
     document.getElementById("smoothieBase_orangeJuice").checked = true
     document.getElementById("milkshakeBase_skimmedMilk").checked = true
@@ -73,8 +97,13 @@ function hideExtras() {
     smoothieBase.classList.add("hidden");
     milkshakeBase.classList.add("hidden");
     milkshakeBaseExtra.classList.add("hidden");
+    fieldsetCurrentOrder.classList.add("hidden");
+    fieldsetTotalPrice.classList.add("hidden");
 }
-
+function unhideOrder() {
+    fieldsetCurrentOrder.classList.remove("hidden");
+    fieldsetTotalPrice.classList.remove("hidden");
+}
 // ---------------------------------------------------------
 
 function drinkTypeChange() {
@@ -104,40 +133,58 @@ function checkSizeCost() {
      sizeCost = 4.50;
      orderSize = "Extra Large";
  }
-    orderCost = sizeCost + milkshakeExtraCost
- txtCost.innerText = `${"£" + orderCost.toFixed(2)}`
+    drinkCost = sizeCost + milkshakeExtraCost
+ txtCost.innerText = `${"£" + drinkCost.toFixed(2)}`
 }
 
 // ---------------------------------------------------------
 
 function checkMilkshakeExtra() {
-    if (this.value == "malt") {
-        if (this.checked) {
-            milkshakeExtraCost += 0.85;
-        } else {
-            milkshakeExtraCost -= 0.85;
-        }
-    } else if (this.value == "marshmallows") {
-        if (this.checked) {
-            milkshakeExtraCost += 0.85;
-        } else {
-            milkshakeExtraCost -= 0.85;
-        }
-    } else if (this.value == "whippedCream") {
-        if (this.checked) {
-            milkshakeExtraCost += 0.85;
-        } else {
-            milkshakeExtraCost -= 0.85;
-        }
-    } else if (this.value == "flake") {
-        if (this.checked) {
-            milkshakeExtraCost += 0.85;
-        } else {
-            milkshakeExtraCost -= 0.85;
+    if (this.checked) {
+        milkshakeExtraCost += 0.85;
+    } else {
+        milkshakeExtraCost -= 0.85;
+    }
+    drinkCost = sizeCost + milkshakeExtraCost
+    txtCost.innerText = `${"£" + drinkCost.toFixed(2)}`
+}
+function addToOrder(){
+    if (document.getElementById("drinkType_smoothie").checked) {
+        getItemValue(drinkSizeArray);
+        getItemValue(drinkTypeList);
+        getItemValue(ingredientArray);
+        getItemValue(smoothieBaseArray);
+        orderItems.push(drinkCost);
+        txtOrderTotal.innerText = `${orderItems}`
+        orderCost += drinkCost;
+        txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`
+        resetDrinkField();
+        unhideOrder();
+    } else if (document.getElementById("drinkType_milkshake").checked) {
+        getItemValue(drinkSizeArray);
+        getItemValue(drinkTypeList);
+        getItemValue(ingredientArray);
+        getItemValue(milkshakeBaseArray);
+        getItemValue(milkshakeExtra);
+        orderItems.push(drinkCost);
+        txtOrderTotal.innerText = `${orderItems}`
+        orderCost += drinkCost
+        txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`
+        resetDrinkField();
+        unhideOrder();
+    }
+}
+function getItemValue(input) {
+    for (let i = 0; i < input.length; i++) {
+        if (input[i].checked) {
+            orderItems.push(input[i].value);
+            txtOrderTotal.innerText = `${orderItems}`
         }
     }
-    orderCost = sizeCost + milkshakeExtraCost
-    txtCost.innerText = `${"£" + orderCost.toFixed(2)}`
+}
+function placeOrder() {
+    alert("Your order has been placed, your final cost is " + `${"£"+ orderCost.toFixed(2)}`);
+    initialiseStartup();
 }
 
 // ---------------------------------------------------------
