@@ -3,7 +3,7 @@
 }
 
 fieldset {
-    border: solid 0.1em;
+    border: solid 0.2em;
     margin: 0.5em;
     width: 12.5em;
 }
@@ -24,4 +24,8 @@ legend {
 
 input {
     margin: 0.3em;
+}
+
+#orderTotal {
+    width: 30em;
 }
