@@ -1,21 +1,19 @@
 // Preliminary Check to ensure Javascript file loads on startup.
 console.log("main.js has loaded successful");
 
-//Buttons
 const btnOrder = document.getElementById("addOrder")
 const btnPlaceOrder = document.getElementById("placeOrder")
 const btnResetPage = document.getElementById("resetPage");
 const btnSaveFav = document.getElementById("saveFavourite");
 const btnOrderFave = document.getElementById("orderFavourite");
-//Arrays
+
 const drinkSizeArray = document.getElementsByName("sizeSelection");
 const ingredientArray = document.getElementsByName("ingredients");
 const smoothieBaseArray = document.getElementsByName("itemBaseSmoothie");
 const drinkSize = document.getElementById("bevSize");
 const drinkTypeList = document.getElementsByName("drinkType");
 const milkshakeExtra = document.getElementsByName("milkshakeExtraItem");
-const milkshakeBaseArray = document.getElementsByName("itemBaseMilkshake");
-//Misc
+
 const smoothieBase = document.getElementById("smoothieBase");
 const milkshakeBase = document.getElementById("milkshakeBase");
 const milkshakeBaseExtra = document.getElementById("milkshakeExtra");
@@ -27,15 +25,12 @@ const txtCost = document.getElementById("cost");
 const txtOrderTotal = document.getElementById("orderTotal");
 const txtFinalOrderPrice = document.getElementById("orderTotalCost");
 
-//establishing variable costs for cost processing and display.
-let orderSize;
 let drinkCost;
 let sizeCost;
 let milkshakeExtraCost;
 let orderCost;
 let orderItems = [];
 
-//Adding change event listener and calling function to check what is checked and apply appropriate feature.
 drinkSize.addEventListener("change", checkSizeCost)
 drinkType.addEventListener("change", drinkTypeChange)
 btnOrder.addEventListener("click", addToOrder)
@@ -56,7 +51,6 @@ function initialiseStartup() {
     hideExtras()
     console.log("Startup configured.")
 }
-
 function resetDrinkField() {
     sizeCost = 3.20;
     drinkCost = sizeCost
@@ -93,7 +87,6 @@ function uncheckItems() {
     document.getElementById("milkshakeBase_skimmedMilk").checked = true
 }
 function hideExtras() {
-    //hiding additional fieldset that are not needed to be shown
     smoothieBase.classList.add("hidden");
     milkshakeBase.classList.add("hidden");
     milkshakeBaseExtra.classList.add("hidden");
@@ -122,16 +115,12 @@ function drinkTypeChange() {
 function checkSizeCost() {
  if (document.getElementById("sizeS").checked) {
      sizeCost = 2.70;
-     orderSize = "Small";
  } else if (document.getElementById("sizeM").checked) {
      sizeCost = 3.20;
-     orderSize = "Medium";
  } else if (document.getElementById("sizeL").checked) {
      sizeCost = 3.70;
-     orderSize = "Large";
  } else {
      sizeCost = 4.50;
-     orderSize = "Extra Large";
  }
     drinkCost = sizeCost + milkshakeExtraCost
  txtCost.innerText = `${"£" + drinkCost.toFixed(2)}`
@@ -154,25 +143,24 @@ function addToOrder(){
         getItemValue(drinkTypeList);
         getItemValue(ingredientArray);
         getItemValue(smoothieBaseArray);
-        orderItems.push(drinkCost);
-        txtOrderTotal.innerText = `${orderItems}`
-        orderCost += drinkCost;
-        txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`
-        resetDrinkField();
-        unhideOrder();
+        printOrder()
     } else if (document.getElementById("drinkType_milkshake").checked) {
         getItemValue(drinkSizeArray);
         getItemValue(drinkTypeList);
         getItemValue(ingredientArray);
         getItemValue(milkshakeBaseArray);
         getItemValue(milkshakeExtra);
-        orderItems.push(drinkCost);
-        txtOrderTotal.innerText = `${orderItems}`
-        orderCost += drinkCost
-        txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`
-        resetDrinkField();
-        unhideOrder();
+        printOrder()
     }
+}
+function printOrder() {
+    orderItems.push("£" + drinkCost.toFixed("2") + "\n");
+    let strOrderItems = orderItems.join(" ")
+    txtOrderTotal.innerText = `${strOrderItems}`
+    orderCost += drinkCost
+    txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`
+    resetDrinkField();
+    unhideOrder();
 }
 function getItemValue(input) {
     for (let i = 0; i < input.length; i++) {
