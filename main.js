@@ -3,22 +3,22 @@ console.log("main.js has loaded successful");
 
 const btnOrder = document.getElementById("addOrder");
 const btnPlaceOrder = document.getElementById("placeOrder");
-const btnResetPage = document.getElementById("resetPage");
 const btnSaveFav = document.getElementById("saveFavourite");
 const btnOrderFave = document.getElementById("orderFavourite");
+const btnResetPage = document.getElementById("resetPage");
 // ----
 const optDrinkSize = document.getElementsByName("sizeSelection");
+const optDrinkTypeList = document.getElementsByName("drinkType");
 const optIngredients = document.getElementsByName("ingredients");
 const optSmoothieBase = document.getElementsByName("itemBaseSmoothie");
 const optMilkshakeBase = document.getElementsByName("itemBaseMilkshake");
-const optDrinkTypeList = document.getElementsByName("drinkType");
 const optMilkshakeExtra = document.getElementsByName("milkshakeExtraItem");
 // ----
 const fieldsetDrinkSize = document.getElementById("bevSize");
+const fieldsetDrinkType = document.getElementById("drinkType");
 const fieldsetSmoothieBase = document.getElementById("smoothieBase");
 const fieldsetMilkshakeBase = document.getElementById("milkshakeBase");
 const fieldsetMilkshakeBaseExtra = document.getElementById("milkshakeExtra");
-const fieldsetDrinkType = document.getElementById("drinkType");
 const fieldsetCurrentOrder = document.getElementById("displayOrder");
 const fieldsetTotalPrice = document.getElementById("displayOrderPrice");
 // ----
@@ -29,20 +29,25 @@ const txtFinalOrderPrice = document.getElementById("orderTotalCost");
 let currentDrinkCost;
 let bevSizeCost;
 let milkshakeExtraCost;
+let isDrinkChecked;
 let isIngredientChecked;
+let isOrderSubmitted;
 let orderCost;
 let orderItems = [];
 
 fieldsetDrinkSize.addEventListener("change", checkSizeCost);
 fieldsetDrinkType.addEventListener("change", drinkTypeChange);
+// ----
+optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
+optMilkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra));
+// ----
 btnOrder.addEventListener("click", addToOrder);
 btnPlaceOrder.addEventListener("click", placeOrder);
 btnSaveFav.addEventListener("click", saveFavourite);
 btnOrderFave.addEventListener("click", orderFavourite);
 btnResetPage.addEventListener("click", initialiseStartup);
-optMilkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra));
-optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
 
+// on load
 initialiseStartup();
 
 // ---------------------------------------------------------
@@ -58,11 +63,13 @@ function initialiseStartup() {
 // ---------------------------------------------------------
 
 function setVariables() {
+    orderItems = [];
     bevSizeCost = 3.20;
     milkshakeExtraCost = 0;
+    isDrinkChecked = 0;
     isIngredientChecked = 0;
-    btnSaveFav.disabled = isIngredientChecked === 0;
-    orderItems = [];
+    isOrderSubmitted = 0
+    enableOrderButton();
     currentDrinkCost = bevSizeCost;
     orderCost = 0;
     txtCost.innerText = `${"£" + currentDrinkCost.toFixed(2)}`;
@@ -91,6 +98,9 @@ function uncheckItems() {
 function resetDrinkField() {
     bevSizeCost = 3.20;
     isIngredientChecked = 0;
+    isDrinkChecked = 0;
+    isIngredientChecked = 0;
+    enableOrderButton();
     currentDrinkCost = bevSizeCost;
     milkshakeExtraCost = 0;
     txtCost.innerText = `${"£" + currentDrinkCost.toFixed(2)}`;
@@ -119,12 +129,16 @@ function drinkTypeChange() {
         fieldsetSmoothieBase.classList.remove("hidden");
         fieldsetMilkshakeBase.classList.add("hidden");
         fieldsetMilkshakeBaseExtra.classList.add("hidden");
+        isDrinkChecked = 1
+        enableOrderButton();
 
     } else if (document.getElementById("drinkType_milkshake").checked) { // checks if milkshake radio button is checked.
         console.log("Milkshake has been Selected, Displaying relevant fields.");
         fieldsetMilkshakeBase.classList.remove("hidden");
         fieldsetMilkshakeBaseExtra.classList.remove("hidden");
         fieldsetSmoothieBase.classList.add("hidden");
+        isDrinkChecked = 1
+        enableOrderButton();
     }
 }
 
@@ -156,12 +170,14 @@ function checkMilkshakeExtra() {
 
 function addToOrder(){
     if (document.getElementById("drinkType_smoothie").checked) {
+        isOrderSubmitted = 1
         getItemValue(optDrinkSize);
         getItemValue(optDrinkTypeList);
         getItemValue(optIngredients);
         getItemValue(optSmoothieBase);
         printOrder();
     } else if (document.getElementById("drinkType_milkshake").checked) {
+        isOrderSubmitted = 1
         getItemValue(optDrinkSize);
         getItemValue(optDrinkTypeList);
         getItemValue(optIngredients);
@@ -193,11 +209,21 @@ function getItemValue(input) {
 function getIngredientsTotal() {
         if (this.checked) {
             isIngredientChecked += 1;
-            btnSaveFav.disabled = isIngredientChecked === 0;
+            enableOrderButton();
         } else {
             isIngredientChecked -= 1;
-            btnSaveFav.disabled = isIngredientChecked === 0;
-    }
+            enableOrderButton();
+        }
+}
+
+function enableOrderButton() {
+    btnOrder.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
+    btnSaveFav.disabled = (isDrinkChecked === 0 || isIngredientChecked === 0) && isOrderSubmitted === 0;
+    btnPlaceOrder.disabled = isOrderSubmitted === 0
+    if (btnOrder.disabled === false) {
+        console.log("'Add to Order' Button has been enabled.")
+        }
+
 }
 
 function placeOrder() {
