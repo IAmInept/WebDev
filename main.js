@@ -72,6 +72,7 @@ function setVariables() {
     enableOrderButton();
     currentDrinkCost = bevSizeCost;
     orderCost = 0;
+    localStorage.clear()
     txtCost.innerText = `${"£" + currentDrinkCost.toFixed(2)}`;
 }
 
@@ -217,6 +218,7 @@ function getIngredientsTotal() {
 }
 
 function enableOrderButton() {
+    btnOrderFave.disabled = localStorage.length === 0;
     btnOrder.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
     btnSaveFav.disabled = (isDrinkChecked === 0 || isIngredientChecked === 0) && isOrderSubmitted === 0;
     btnPlaceOrder.disabled = isOrderSubmitted === 0
@@ -234,12 +236,32 @@ function placeOrder() {
 // ---------------------------------------------------------
 
 function saveFavourite() {
-    // write to json file
-    console.log("Order Saved");
-}
+   localStorage.setItem("Drink Size", document.querySelector('input[name="sizeSelection"]:checked').value);
+   localStorage.setItem("Drink Type", document.querySelector('input[name="drinkType"]:checked').value);
+    let ingredients = document.querySelectorAll('input[name="ingredients"]:checked')
 
+    for (let i = 0; i < ingredients.length; i++) {
+        localStorage.setItem(`${'Ingredients' + i}`, ingredients[i].value)
+    }
+    if (document.getElementById("drinkType_smoothie").checked) {
+        localStorage.setItem("Smoothie Base", document.querySelector('input[name="itemBaseSmoothie"]:checked').value)
+    } else if (document.getElementById("drinkType_milkshake").checked) {
+        localStorage.setItem("Milkshake Base", document.querySelector('input[name="itemBaseMilkshake"]:checked').value)
+        let milkshakeExtra = document.querySelectorAll('input[name="milkshakeExtraItem"]:checked')
+        for (let i = 0; i < milkshakeExtra.length; i++) {
+            localStorage.setItem(`${'Milkshake Extras' + i}`, milkshakeExtra[i].value)
+        }
+    }
+    localStorage.setItem("Cost", currentDrinkCost)
+    enableOrderButton()
+    console.log("Order has been Written to Local Storage.");
+}
 function orderFavourite() {
     console.log("Grabbing Order");
-    // load & read json file
+    // let customerOrder = []
+    // for (let i = 0; i < localStorage.length; i++) {
+    //     customerOrder.push(localStorage.getItem(i));
+    // }
+
     console.log("Order Loaded");
 }
