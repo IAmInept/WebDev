@@ -15,11 +15,36 @@ legend {
 #resetPage {
     background-color: brown;
     border: 0.2em solid black ;
-    color: white;
+    color: black;
     padding: 1em;
 }
+
 #resetPage:hover {
     background-color: darkred;
+    color: white;
+}
+
+#addOrder {
+    background-color: dodgerblue;
+    border: 0.2em solid black ;
+    color: black;
+    padding: 1em;
+}
+#addOrder:hover {
+    background-color: blue;
+    color: white;
+}
+
+#placeOrder {
+    background-color: darkseagreen;
+    border: 0.2em solid black ;
+    color: black;
+    padding: 1em;
+}
+
+#placeOrder:hover {
+    background-color: green;
+    color: white;
 }
 
 input {
@@ -27,5 +52,29 @@ input {
 }
 
 #orderTotal {
-    width: 30em;
+    width: 50em;
+}
+
+#saveFavourite {
+    background-color: lightyellow;
+    border: 0.2em solid black ;
+    color: black;
+    padding: 1em;
+}
+
+#saveFavourite:hover {
+    background-color: darkkhaki;
+    color: white;
+}
+
+#orderFavourite {
+    background-color: mediumpurple;
+    border: 0.2em solid black ;
+    color: black;
+    padding: 1em;
+}
+
+#orderFavourite:hover {
+    background-color: rebeccapurple;
+    color: white;
 }
