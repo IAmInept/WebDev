@@ -9,7 +9,7 @@ const btnResetPage = document.getElementById("resetPage");
 // ----
 const optDrinkSize = document.getElementsByName("sizeSelection");
 const optDrinkTypeList = document.getElementsByName("drinkType");
-const optIngredients = document.getElementsByName("ingredients");
+const optIngredients = document.getElementsByName("ingredient");
 const optSmoothieBase = document.getElementsByName("itemBaseSmoothie");
 const optMilkshakeBase = document.getElementsByName("itemBaseMilkshake");
 const optMilkshakeExtra = document.getElementsByName("milkshakeExtraItem");
@@ -21,6 +21,7 @@ const fieldsetMilkshakeBase = document.getElementById("milkshakeBase");
 const fieldsetMilkshakeBaseExtra = document.getElementById("milkshakeExtra");
 const fieldsetCurrentOrder = document.getElementById("displayOrder");
 const fieldsetTotalPrice = document.getElementById("displayOrderPrice");
+const fieldsetBevIngredients = document.getElementById("bevIngredients");
 // ----
 const txtCost = document.getElementById("cost");
 const txtOrderTotal = document.getElementById("orderTotal");
@@ -34,12 +35,14 @@ let isIngredientChecked;
 let isOrderSubmitted;
 let orderCost;
 let orderItems = [];
+let ingredientArray = [];
+let localStorageArray = [];
 
 fieldsetDrinkSize.addEventListener("change", checkSizeCost);
 fieldsetDrinkType.addEventListener("change", drinkTypeChange);
 // ----
-optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
 optMilkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra));
+optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
 // ----
 btnOrder.addEventListener("click", addToOrder);
 btnPlaceOrder.addEventListener("click", placeOrder);
@@ -54,6 +57,7 @@ initialiseStartup();
 
 function initialiseStartup() {
     console.log("Startup initialised");
+    getData()
     setVariables();
     uncheckItems();
     hideExtras();
@@ -63,6 +67,7 @@ function initialiseStartup() {
 // ---------------------------------------------------------
 
 function setVariables() {
+    localStorage.clear();
     orderItems = [];
     bevSizeCost = 3.20;
     milkshakeExtraCost = 0;
@@ -80,16 +85,13 @@ function uncheckItems() {
     document.getElementById("drinkType_milkshake").checked = false;
     document.getElementById("drinkType_smoothie").checked = false;
 
-    document.getElementById("bevIngredients_banana").checked = false;
-    document.getElementById("bevIngredients_strawberry").checked = false;
-    document.getElementById("bevIngredients_cranberry").checked = false;
-    document.getElementById("bevIngredients_raspberry").checked = false;
-    document.getElementById("bevIngredients_chocolate").checked = false;
+    for (let ingredient in optIngredients) {
+        optIngredients[ingredient].checked = false;
+    }
 
-    document.getElementById("milkshakeExtra_malt").checked = false;
-    document.getElementById("milkshakeExtra_marshmallows").checked = false;
-    document.getElementById("milkshakeExtra_whippedCream").checked = false;
-    document.getElementById("milkshakeExtra_flake").checked = false;
+    for (let extra in optMilkshakeExtra) {
+        optMilkshakeExtra[extra].checked = false;
+    }
 
     document.getElementById("sizeM").checked = true;
     document.getElementById("smoothieBase_orangeJuice").checked = true;
@@ -100,11 +102,10 @@ function resetDrinkField() {
     bevSizeCost = 3.20;
     isIngredientChecked = 0;
     isDrinkChecked = 0;
-    isIngredientChecked = 0;
-    enableOrderButton();
     currentDrinkCost = bevSizeCost;
     milkshakeExtraCost = 0;
     txtCost.innerText = `${"£" + currentDrinkCost.toFixed(2)}`;
+    enableOrderButton();
     uncheckItems();
     hideExtras();
 }
@@ -125,16 +126,14 @@ function unhideOrder() {
 // ---------------------------------------------------------
 
 function drinkTypeChange() {
-    if (document.getElementById("drinkType_smoothie").checked) { // checks if smoothie radio button is checked.
-        console.log("Smoothie has been selected, Displaying relevant fields."); // logs to confirm if statement is functioned
+    if (document.getElementById("drinkType_smoothie").checked) {
         fieldsetSmoothieBase.classList.remove("hidden");
         fieldsetMilkshakeBase.classList.add("hidden");
         fieldsetMilkshakeBaseExtra.classList.add("hidden");
         isDrinkChecked = 1
         enableOrderButton();
 
-    } else if (document.getElementById("drinkType_milkshake").checked) { // checks if milkshake radio button is checked.
-        console.log("Milkshake has been Selected, Displaying relevant fields.");
+    } else if (document.getElementById("drinkType_milkshake").checked) {
         fieldsetMilkshakeBase.classList.remove("hidden");
         fieldsetMilkshakeBaseExtra.classList.remove("hidden");
         fieldsetSmoothieBase.classList.add("hidden");
@@ -170,27 +169,22 @@ function checkMilkshakeExtra() {
 }
 
 function addToOrder(){
+    isOrderSubmitted = 1
+    getItemValue(optDrinkSize);
+    getItemValue(optDrinkTypeList);
+    getItemValue(optIngredients);
     if (document.getElementById("drinkType_smoothie").checked) {
-        isOrderSubmitted = 1
-        getItemValue(optDrinkSize);
-        getItemValue(optDrinkTypeList);
-        getItemValue(optIngredients);
         getItemValue(optSmoothieBase);
-        printOrder();
     } else if (document.getElementById("drinkType_milkshake").checked) {
-        isOrderSubmitted = 1
-        getItemValue(optDrinkSize);
-        getItemValue(optDrinkTypeList);
-        getItemValue(optIngredients);
         getItemValue(optMilkshakeBase);
         getItemValue(optMilkshakeExtra);
-        printOrder();
     }
+    printOrder();
 }
 
 function printOrder() {
     orderItems.push("£" + currentDrinkCost.toFixed(2) + "\n");
-    let strOrderItems = orderItems.join(" ");
+    let strOrderItems = orderItems.join(", ");
     txtOrderTotal.innerText = `${strOrderItems}`;
     orderCost += currentDrinkCost;
     txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
@@ -220,10 +214,9 @@ function getIngredientsTotal() {
 function enableOrderButton() {
     btnOrderFave.disabled = localStorage.length === 0;
     btnOrder.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
-    btnSaveFav.disabled = (isDrinkChecked === 0 || isIngredientChecked === 0) && isOrderSubmitted === 0;
+    btnSaveFav.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
     btnPlaceOrder.disabled = isOrderSubmitted === 0
     if (btnOrder.disabled === false) {
-        console.log("'Add to Order' Button has been enabled.")
         }
 
 }
@@ -235,33 +228,56 @@ function placeOrder() {
 
 // ---------------------------------------------------------
 
+function getData() {
+    fetch("ingredients.json")
+        .then(res => res.json())
+
+        .then(data => processData(data))
+}
+
+function processData(data) {
+    ingredientArray = data;
+
+    let output = "<legend>Ingredients</legend>";
+
+    for (let i in ingredientArray) {
+        output += `<div> <input type="checkbox" name="${ingredientArray[i].name}" id="${ingredientArray[i].id}" value="${ingredientArray[i].value}"> <label for="${ingredientArray[i].id}">${ingredientArray[i].value}</label> </div>`;
+    }
+    fieldsetBevIngredients.innerHTML = output;
+    optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
+}
+
+// ---------------------------------------------------------
+
 function saveFavourite() {
+    localStorage.clear();
    localStorage.setItem("Drink Size", document.querySelector('input[name="sizeSelection"]:checked').value);
    localStorage.setItem("Drink Type", document.querySelector('input[name="drinkType"]:checked').value);
-    let ingredients = document.querySelectorAll('input[name="ingredients"]:checked')
+    let ingredients = document.querySelectorAll('input[name="ingredient"]:checked')
 
     for (let i = 0; i < ingredients.length; i++) {
-        localStorage.setItem(`${'Ingredients' + i}`, ingredients[i].value)
+        localStorage.setItem(`${'Ingredients' + i}`, ingredients[i].value);
     }
     if (document.getElementById("drinkType_smoothie").checked) {
-        localStorage.setItem("Smoothie Base", document.querySelector('input[name="itemBaseSmoothie"]:checked').value)
+        localStorage.setItem("Smoothie Base", document.querySelector('input[name="itemBaseSmoothie"]:checked').value);
     } else if (document.getElementById("drinkType_milkshake").checked) {
-        localStorage.setItem("Milkshake Base", document.querySelector('input[name="itemBaseMilkshake"]:checked').value)
-        let milkshakeExtra = document.querySelectorAll('input[name="milkshakeExtraItem"]:checked')
+        localStorage.setItem("Milkshake Base", document.querySelector('input[name="itemBaseMilkshake"]:checked').value);
+        let milkshakeExtra = document.querySelectorAll('input[name="milkshakeExtraItem"]:checked');
         for (let i = 0; i < milkshakeExtra.length; i++) {
-            localStorage.setItem(`${'Milkshake Extras' + i}`, milkshakeExtra[i].value)
+            localStorage.setItem(`${'Milkshake Extras' + i}`, milkshakeExtra[i].value);
         }
     }
-    localStorage.setItem("Cost", currentDrinkCost)
-    enableOrderButton()
+    localStorage.setItem("Cost", currentDrinkCost);
+    enableOrderButton();
     console.log("Order has been Written to Local Storage.");
 }
 function orderFavourite() {
-    console.log("Grabbing Order");
-    // let customerOrder = []
-    // for (let i = 0; i < localStorage.length; i++) {
-    //     customerOrder.push(localStorage.getItem(i));
-    // }
-
-    console.log("Order Loaded");
+    localStorageArray = [];
+    for (let i = 0; i < localStorage.length ; i++) {
+        localStorageArray.push(localStorage.key(i));
+    }
+    // orderCost += parseFloat(orderItems[orderItems.length - 1]);
+    // txtOrderTotal.innerText = `${orderItems}`;
+    // txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
+    // unhideOrder();
 }
