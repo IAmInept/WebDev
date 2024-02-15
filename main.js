@@ -33,6 +33,7 @@ let milkshakeExtraCost;
 let isDrinkChecked;
 let isIngredientChecked;
 let isOrderSubmitted;
+let isOrderPrinted;
 let orderCost;
 let strOrderItems;
 let orderItems = [];
@@ -59,7 +60,7 @@ initialiseStartup();
 // Startup Functions
 function initialiseStartup() {
     console.log("Startup initialised");
-    getData()
+    getData();
     setVariables();
     uncheckItems();
     hideExtras();
@@ -70,7 +71,7 @@ function getData() {
     fetch("ingredients.json")
         .then(res => res.json())
 
-        .then(data => processData(data))
+        .then(data => processData(data));
 }
 
 function processData(data) {
@@ -252,6 +253,7 @@ function placeOrder() {
 // ---------------------------------------------------------
 
 function saveFavourite() {
+     isOrderSubmitted = false
     localStorage.clear();
    localStorage.setItem("Drink Size", document.querySelector('input[name="sizeSelection"]:checked').value);
    localStorage.setItem("Drink Type", document.querySelector('input[name="drinkType"]:checked').value);
@@ -274,15 +276,20 @@ function saveFavourite() {
     console.log("Order has been Written to Local Storage.");
 }
 function orderFavourite() {
+    enableOrderButton();
     localStorageKeyArray = [];
-    for (let i = 0; i < localStorage.length ; i++) {
-        localStorageKeyArray.push(localStorage.key(i));
-        localStorageItems.push(localStorage.getItem(localStorageKeyArray[i]));
-    }
 
-    // code currently will double the order every time -- needs to be fixed.
+    if (isOrderSubmitted === false) {
+        console.log("This shouldn't print the second time")
+        for (let i = 0; i < localStorage.length ; i++) {
+            console.log("Test")
+            localStorageKeyArray.push(localStorage.key(i));
+            localStorageItems.push(localStorage.getItem(localStorageKeyArray[i]));
+        }
+        isOrderSubmitted = true;
+    }
+    orderItems.push(localStorageItems.join(", ") + "\n");
     unhideOrder();
-    orderItems.push(localStorageItems);
     strOrderItems = orderItems.join(", ");
     txtOrderTotal.innerText = `${strOrderItems}`;
     orderCost += parseFloat(localStorageItems[localStorageItems.length - 1]);
