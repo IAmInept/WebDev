@@ -34,9 +34,11 @@ let isDrinkChecked;
 let isIngredientChecked;
 let isOrderSubmitted;
 let orderCost;
+let strOrderItems;
 let orderItems = [];
 let ingredientArray = [];
-let localStorageArray = [];
+let localStorageKeyArray = [];
+let localStorageItems = [];
 
 fieldsetDrinkSize.addEventListener("change", checkSizeCost);
 fieldsetDrinkType.addEventListener("change", drinkTypeChange);
@@ -54,7 +56,7 @@ btnResetPage.addEventListener("click", initialiseStartup);
 initialiseStartup();
 
 // ---------------------------------------------------------
-
+// Startup Functions
 function initialiseStartup() {
     console.log("Startup initialised");
     getData()
@@ -64,16 +66,37 @@ function initialiseStartup() {
     console.log("Startup configured.");
 }
 
+function getData() {
+    fetch("ingredients.json")
+        .then(res => res.json())
+
+        .then(data => processData(data))
+}
+
+function processData(data) {
+    ingredientArray = data;
+
+    let output = "<legend>Ingredients</legend>";
+
+    for (let i in ingredientArray) {
+        output += `<div> <input type="checkbox" name="${ingredientArray[i].name}" id="${ingredientArray[i].id}" value="${ingredientArray[i].value}"> <label for="${ingredientArray[i].id}">${ingredientArray[i].value}</label> </div>`;
+    }
+    fieldsetBevIngredients.innerHTML = output;
+    optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
+}
+
 // ---------------------------------------------------------
 
 function setVariables() {
     localStorage.clear();
     orderItems = [];
+    localStorageItems = [];
+    localStorageKeyArray = [];
     bevSizeCost = 3.20;
     milkshakeExtraCost = 0;
-    isDrinkChecked = 0;
+    isDrinkChecked = false;
     isIngredientChecked = 0;
-    isOrderSubmitted = 0
+    isOrderSubmitted = false;
     enableOrderButton();
     currentDrinkCost = bevSizeCost;
     orderCost = 0;
@@ -101,7 +124,7 @@ function uncheckItems() {
 function resetDrinkField() {
     bevSizeCost = 3.20;
     isIngredientChecked = 0;
-    isDrinkChecked = 0;
+    isDrinkChecked = false;
     currentDrinkCost = bevSizeCost;
     milkshakeExtraCost = 0;
     txtCost.innerText = `${"£" + currentDrinkCost.toFixed(2)}`;
@@ -130,14 +153,14 @@ function drinkTypeChange() {
         fieldsetSmoothieBase.classList.remove("hidden");
         fieldsetMilkshakeBase.classList.add("hidden");
         fieldsetMilkshakeBaseExtra.classList.add("hidden");
-        isDrinkChecked = 1
+        isDrinkChecked = true
         enableOrderButton();
 
     } else if (document.getElementById("drinkType_milkshake").checked) {
         fieldsetMilkshakeBase.classList.remove("hidden");
         fieldsetMilkshakeBaseExtra.classList.remove("hidden");
         fieldsetSmoothieBase.classList.add("hidden");
-        isDrinkChecked = 1
+        isDrinkChecked = true
         enableOrderButton();
     }
 }
@@ -169,7 +192,7 @@ function checkMilkshakeExtra() {
 }
 
 function addToOrder(){
-    isOrderSubmitted = 1
+    isOrderSubmitted = true
     getItemValue(optDrinkSize);
     getItemValue(optDrinkTypeList);
     getItemValue(optIngredients);
@@ -184,7 +207,7 @@ function addToOrder(){
 
 function printOrder() {
     orderItems.push("£" + currentDrinkCost.toFixed(2) + "\n");
-    let strOrderItems = orderItems.join(", ");
+    strOrderItems = orderItems.join(", ");
     txtOrderTotal.innerText = `${strOrderItems}`;
     orderCost += currentDrinkCost;
     txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
@@ -213,9 +236,9 @@ function getIngredientsTotal() {
 
 function enableOrderButton() {
     btnOrderFave.disabled = localStorage.length === 0;
-    btnOrder.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
-    btnSaveFav.disabled = isDrinkChecked === 0 || isIngredientChecked === 0;
-    btnPlaceOrder.disabled = isOrderSubmitted === 0
+    btnOrder.disabled = isDrinkChecked === false || isIngredientChecked === 0;
+    btnSaveFav.disabled = isDrinkChecked === false || isIngredientChecked === 0;
+    btnPlaceOrder.disabled = isOrderSubmitted === false;
     if (btnOrder.disabled === false) {
         }
 
@@ -228,35 +251,14 @@ function placeOrder() {
 
 // ---------------------------------------------------------
 
-function getData() {
-    fetch("ingredients.json")
-        .then(res => res.json())
-
-        .then(data => processData(data))
-}
-
-function processData(data) {
-    ingredientArray = data;
-
-    let output = "<legend>Ingredients</legend>";
-
-    for (let i in ingredientArray) {
-        output += `<div> <input type="checkbox" name="${ingredientArray[i].name}" id="${ingredientArray[i].id}" value="${ingredientArray[i].value}"> <label for="${ingredientArray[i].id}">${ingredientArray[i].value}</label> </div>`;
-    }
-    fieldsetBevIngredients.innerHTML = output;
-    optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
-}
-
-// ---------------------------------------------------------
-
 function saveFavourite() {
     localStorage.clear();
    localStorage.setItem("Drink Size", document.querySelector('input[name="sizeSelection"]:checked').value);
    localStorage.setItem("Drink Type", document.querySelector('input[name="drinkType"]:checked').value);
-    let ingredients = document.querySelectorAll('input[name="ingredient"]:checked')
+    let localStorageIngredients = document.querySelectorAll('input[name="ingredient"]:checked')
 
-    for (let i = 0; i < ingredients.length; i++) {
-        localStorage.setItem(`${'Ingredients' + i}`, ingredients[i].value);
+    for (let items = 0; items < localStorageIngredients.length; items++) {
+        localStorage.setItem(`${'Ingredients' + items}`, localStorageIngredients[items].value);
     }
     if (document.getElementById("drinkType_smoothie").checked) {
         localStorage.setItem("Smoothie Base", document.querySelector('input[name="itemBaseSmoothie"]:checked').value);
@@ -272,12 +274,17 @@ function saveFavourite() {
     console.log("Order has been Written to Local Storage.");
 }
 function orderFavourite() {
-    localStorageArray = [];
+    localStorageKeyArray = [];
     for (let i = 0; i < localStorage.length ; i++) {
-        localStorageArray.push(localStorage.key(i));
+        localStorageKeyArray.push(localStorage.key(i));
+        localStorageItems.push(localStorage.getItem(localStorageKeyArray[i]));
     }
-    // orderCost += parseFloat(orderItems[orderItems.length - 1]);
-    // txtOrderTotal.innerText = `${orderItems}`;
-    // txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
-    // unhideOrder();
+
+    // code currently will double the order every time -- needs to be fixed.
+    unhideOrder();
+    orderItems.push(localStorageItems);
+    strOrderItems = orderItems.join(", ");
+    txtOrderTotal.innerText = `${strOrderItems}`;
+    orderCost += parseFloat(localStorageItems[localStorageItems.length - 1]);
+    txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
 }
