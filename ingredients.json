@@ -1,0 +1,8 @@
+[
+  {"name" : "ingredient", "id" : "bevIngredients_banana", "value" : "Banana"},
+  {"name" : "ingredient", "id" : "bevIngredients_raspberry", "value" : "Raspberry"},
+  {"name" : "ingredient", "id" : "bevIngredients_cranberry", "value" : "Cranberry"},
+  {"name" : "ingredient", "id" : "bevIngredients_peach", "value" : "Peach"},
+  {"name" : "ingredient", "id" : "bevIngredients_strawberry", "value" : "Strawberry"},
+  {"name" : "ingredient", "id" : "bevIngredients_chocolate", "value" : "Chocolate"}
+]
