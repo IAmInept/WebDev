@@ -98,6 +98,7 @@ function setVariables() {
     isDrinkChecked = false;
     isIngredientChecked = 0;
     isOrderSubmitted = false;
+    isOrderPrinted = false;
     enableOrderButton();
     currentDrinkCost = bevSizeCost;
     orderCost = 0;
@@ -253,7 +254,7 @@ function placeOrder() {
 // ---------------------------------------------------------
 
 function saveFavourite() {
-     isOrderSubmitted = false
+    isOrderPrinted = false
     localStorage.clear();
    localStorage.setItem("Drink Size", document.querySelector('input[name="sizeSelection"]:checked').value);
    localStorage.setItem("Drink Type", document.querySelector('input[name="drinkType"]:checked').value);
@@ -273,25 +274,23 @@ function saveFavourite() {
     }
     localStorage.setItem("Cost", currentDrinkCost);
     enableOrderButton();
-    console.log("Order has been Written to Local Storage.");
 }
 function orderFavourite() {
+    isOrderSubmitted = true;
     enableOrderButton();
     localStorageKeyArray = [];
-
-    if (isOrderSubmitted === false) {
-        console.log("This shouldn't print the second time")
-        for (let i = 0; i < localStorage.length ; i++) {
-            console.log("Test")
+    if (isOrderPrinted === false) {
+        for (let i = 0; i < localStorage.length; i++) {
             localStorageKeyArray.push(localStorage.key(i));
             localStorageItems.push(localStorage.getItem(localStorageKeyArray[i]));
         }
-        isOrderSubmitted = true;
+        localStorageItems[localStorageItems.length - 1] = " £" + parseFloat(localStorageItems[localStorageItems.length - 1]).toFixed(2);
+        isOrderPrinted = true;
     }
     orderItems.push(localStorageItems.join(", ") + "\n");
     unhideOrder();
-    strOrderItems = orderItems.join(", ");
+    strOrderItems = orderItems.join();
     txtOrderTotal.innerText = `${strOrderItems}`;
-    orderCost += parseFloat(localStorageItems[localStorageItems.length - 1]);
+    orderCost += parseFloat(localStorage.getItem("Cost"));
     txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
 }
