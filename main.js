@@ -40,24 +40,25 @@ let orderItems = [];
 let ingredientArray = [];
 let localStorageKeyArray = [];
 let localStorageItems = [];
+let localStorageCost
+let localStorageSize
 
 fieldsetDrinkSize.addEventListener("change", checkSizeCost);
 fieldsetDrinkType.addEventListener("change", drinkTypeChange);
-// ----
-optMilkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra));
-optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
 // ----
 btnOrder.addEventListener("click", addToOrder);
 btnPlaceOrder.addEventListener("click", placeOrder);
 btnSaveFav.addEventListener("click", saveFavourite);
 btnOrderFave.addEventListener("click", orderFavourite);
 btnResetPage.addEventListener("click", initialiseStartup);
+// ----
+optMilkshakeExtra.forEach(item => item.addEventListener("change", checkMilkshakeExtra));
+optIngredients.forEach(item => item.addEventListener("change", getIngredientsTotal));
 
 // on load
 initialiseStartup();
 
 // ---------------------------------------------------------
-// Startup Functions
 function initialiseStartup() {
     console.log("Startup initialised");
     getData();
@@ -92,6 +93,8 @@ function setVariables() {
     localStorage.clear();
     orderItems = [];
     localStorageItems = [];
+    localStorageCost = [];
+    localStorageSize = [];
     localStorageKeyArray = [];
     bevSizeCost = 3.20;
     milkshakeExtraCost = 0;
@@ -99,6 +102,7 @@ function setVariables() {
     isIngredientChecked = 0;
     isOrderSubmitted = false;
     isOrderPrinted = false;
+    localStorageCost = 0
     enableOrderButton();
     currentDrinkCost = bevSizeCost;
     orderCost = 0;
@@ -280,17 +284,23 @@ function orderFavourite() {
     enableOrderButton();
     localStorageKeyArray = [];
     if (isOrderPrinted === false) {
+        localStorageCost = parseFloat(localStorage.getItem("Cost"));
+        localStorage.removeItem("Cost");
+        localStorageSize = localStorage.getItem("Drink Size");
+        localStorageItems.push(localStorageSize);
+        localStorage.removeItem("Drink Size");
         for (let i = 0; i < localStorage.length; i++) {
             localStorageKeyArray.push(localStorage.key(i));
             localStorageItems.push(localStorage.getItem(localStorageKeyArray[i]));
         }
-        localStorageItems[localStorageItems.length - 1] = " £" + parseFloat(localStorageItems[localStorageItems.length - 1]).toFixed(2);
+        localStorageItems.push("£" + parseFloat(localStorageCost).toFixed(2))
+        // localStorageItems[localStorageItems.length - 1] = " £" + parseFloat(localStorageItems[localStorageItems.length - 1]).toFixed(2);
         isOrderPrinted = true;
     }
     orderItems.push(localStorageItems.join(", ") + "\n");
     unhideOrder();
     strOrderItems = orderItems.join();
     txtOrderTotal.innerText = `${strOrderItems}`;
-    orderCost += parseFloat(localStorage.getItem("Cost"));
+    orderCost += localStorageCost
     txtFinalOrderPrice.innerText = `${"£"+ orderCost.toFixed(2)}`;
 }
